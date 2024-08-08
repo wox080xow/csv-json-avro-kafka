@@ -1,0 +1,19 @@
+{
+    "namespace": "test.avro",
+    "type": "record",
+    "name": "CSVDATA",
+    "fields": [
+        {
+            "name": "a",
+            "type": "int"
+        },
+        {
+            "name": "b",
+            "type": "int"
+        },
+        {
+            "name": "c",
+            "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}
+        }
+    ]
+}

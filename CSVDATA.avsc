@@ -1,0 +1,26 @@
+{"namespace": "output10.store_returns7M.csv.avro",
+ "type": "record",
+ "name": "CSVDATA",
+ "fields": [
+{"name": "SR_RETURNED_DATE_SK", "type": "int"},
+{"name": "SR_RETURN_TIME_SK", "type": "int"},
+{"name": "SR_ITEM_SK", "type": "int"},
+{"name": "SR_CUSTOMER_SK", "type": "int"},
+{"name": "SR_CDEMO_SK", "type": "int"},
+{"name": "SR_HDEMO_SK", "type": "int"},
+{"name": "SR_ADDR_SK", "type": "int"},
+{"name": "SR_STORE_SK", "type": "int"},
+{"name": "SR_REASON_SK", "type": "int"},
+{"name": "SR_TICKET_NUMBER", "type": "int"},
+{"name": "SR_RETURN_QUANTITY", "type": "int"},
+{"name": "SR_RETURN_AMT", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_RETURN_TAX", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_RETURN_AMT_INC_TAX", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_FEE", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_RETURN_SHIP_COST", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_REFUNDED_CASH", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_REVERSED_CHARGE", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_STORE_CREDIT", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}},
+{"name": "SR_NET_LOSS", "type": {"type": "bytes", "logicalType": "decimal", "precision": 7, "scale": 2}}
+ ]
+}

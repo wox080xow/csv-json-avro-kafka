@@ -1,9 +1,10 @@
 import json
 import fastavro
-import avro.schema
 import argparse
-from decimal import Decimal
-from io import BytesIO
+from decimal import Decimal, getcontext
+
+# 設置 Decimal 的精度，以防止溢出
+getcontext().prec = 50
 
 # 定義 AVRO 架構
 def read_avro_schema(schema_path):
@@ -15,22 +16,26 @@ def read_avro_schema(schema_path):
 def read_json_data(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
-        # 將 'c' 欄位轉換為 Decimal
-        for record in data:
-            record['c'] = Decimal(record['c'])
-        return data
+    return data
 
 # 序列化 Decimal
-def serialize_decimal(decimal_value, precision, scale):
-    scale_factor = Decimal(10) ** -scale
-    unscaled_value = int(decimal_value / scale_factor)
-    return unscaled_value.to_bytes((unscaled_value.bit_length() + 7) // 8, byteorder='big', signed=True)
+def serialize_decimal(decimal_value, scale):
+    # 將小數點移動，生成未縮放的值
+    unscaled_value = int(decimal_value * (10 ** scale))
+    # num_bytes = (unscaled_value.bit_length() + 7) // 8
+    num_bytes = 4
+    return unscaled_value.to_bytes(num_bytes, byteorder='big', signed=True)
 
 # 將 JSON 資料轉換為 AVRO 資料
 def json_to_avro(json_data, schema, output_path):
-    # 將 Decimal 欄位轉換為 bytes
+    # 獲取需要處理的欄位名稱及其屬性
+    decimal_fields = [(field['name'], field['type']['precision'], field['type']['scale']) for field in schema['fields'] if isinstance(field['type'], dict) and field['type'].get('logicalType') == 'decimal']
+    
+    # 處理 Decimal 欄位
     for record in json_data:
-        record['c'] = serialize_decimal(record['c'], 10, 2)
+        for field, precision, scale in decimal_fields:
+            print(record[field])
+            record[field] = serialize_decimal(Decimal(record[field]), scale)
 
     # 寫入 AVRO 文件
     with open(output_path, 'wb') as out:

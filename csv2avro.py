@@ -25,12 +25,21 @@ type_mapping = {
     'SR_STORE_CREDIT': Decimal, 'SR_NET_LOSS': Decimal
 }
 
+def convert_value(field, value):
+    if value == '(null)' or value == '' or value is None:
+        if type_mapping[field] == int:
+            return 0
+        elif type_mapping[field] == Decimal:
+            return Decimal(0)
+    return type_mapping[field](value)
+
 def read_CSVDATA_data(path):
     with open(path, 'r') as data:
         data.readline()  # 跳過標頭行
         reader = csv.reader(data, delimiter="\t")  # 假設資料是用 Tab 分隔的
         for row in reader:
-            converted_row = [type_mapping[field](value) for field, value in zip(fields, row)]
+            # converted_row = [type_mapping[field](value) for field, value in zip(fields, row)]
+            converted_row = [convert_value(field, value) for field, value in zip(fields, row)]
             yield CSVDATARecord._make(converted_row)
 
 def parse_schema(path):

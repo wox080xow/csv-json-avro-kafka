@@ -1,6 +1,7 @@
 import json
 import fastavro
 import avro.schema
+import argparse
 from decimal import Decimal
 from io import BytesIO
 
@@ -37,9 +38,16 @@ def json_to_avro(json_data, schema, output_path):
 
 # 主程序
 if __name__ == "__main__":
-    json_file_path = 'test.json'
-    avro_file_path = 'fromjson.test.avro'
-    schema_file_path = 'test.avsc'
+    parser = argparse.ArgumentParser(description='Convert JSON to AVRO.')
+    parser.add_argument('--json', type=str, required=True, help='Path to the JSON file')
+    parser.add_argument('--schema', type=str, required=True, help='Path to the AVRO schema file')
+    parser.add_argument('--output', type=str, required=True, help='Path to the output AVRO file')
+
+    args = parser.parse_args()
+
+    json_file_path = args.json
+    avro_file_path = args.output
+    schema_file_path = args.schema
 
     # 讀取 AVRO 架構
     schema = read_avro_schema(schema_file_path)

@@ -20,6 +20,8 @@ def read_json_data(file_path):
 
 # 序列化 Decimal
 def serialize_decimal(decimal_value, scale):
+    if decimal_value is None:
+        return b'\x00'  # 預設值為 0
     # 將小數點移動，生成未縮放的值
     unscaled_value = int(decimal_value * (10 ** scale))
     # num_bytes = (unscaled_value.bit_length() + 7) // 8
@@ -35,6 +37,9 @@ def json_to_avro(json_data, schema, output_path):
     for record in json_data:
         for field, precision, scale in decimal_fields:
             print(record[field])
+            if record[field] is None:
+                record[field] = 0
+                print("None has been converted to 0")
             record[field] = serialize_decimal(Decimal(record[field]), scale)
 
     # 寫入 AVRO 文件

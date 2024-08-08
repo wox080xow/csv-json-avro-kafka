@@ -1,6 +1,6 @@
-{"namespace": "output10.store_returns7M.csv.avro",
+{"namespace": "data.avro",
  "type": "record",
- "name": "CSVDATA",
+ "name": "DATA",
  "fields": [
 {"name": "SR_RETURNED_DATE_SK", "type": "int"},
 {"name": "SR_RETURN_TIME_SK", "type": "int"},

@@ -31,10 +31,16 @@ def serialize_decimal(decimal_value, scale):
 # 將 JSON 資料轉換為 AVRO 資料
 def json_to_avro(json_data, schema, output_path):
     # 獲取需要處理的欄位名稱及其屬性
+    int_fields = [field['name'] for field in schema['fields'] if field['type'] == 'int']
     decimal_fields = [(field['name'], field['type']['precision'], field['type']['scale']) for field in schema['fields'] if isinstance(field['type'], dict) and field['type'].get('logicalType') == 'decimal']
     
     # 處理 Decimal 欄位
     for record in json_data:
+        for field in int_fields:
+            if record[field] is None:
+                record[field] = 0
+            record[field] = int(record[field])
+
         for field, precision, scale in decimal_fields:
             print(record[field])
             if record[field] is None:

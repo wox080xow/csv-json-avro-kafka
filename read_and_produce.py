@@ -12,7 +12,7 @@ def read_avro_data(path):
         reader.close()
     return records
 
-def main(topic, avro_file_path):
+def main(topic, avro_file_path, schema_file_path):
     # Kafka and Schema Registry configuration
     KAFKA_BROKER = '172.31.15.9:9092,172.31.13.152:9092,172.31.1.59:9092'
     SCHEMA_REGISTRY_URL = 'http://172.31.15.9:8081'
@@ -21,8 +21,7 @@ def main(topic, avro_file_path):
     schema_registry_client = CachedSchemaRegistryClient(SCHEMA_REGISTRY_URL)
 
     # 讀取 AVRO schema
-    schema_path = "test.avsc"
-    schema = avro.schema.parse(open(schema_path).read())
+    schema = avro.schema.parse(open(schema_file_path).read())
 
     # 配置 Kafka 生產者
     avro_producer = AvroProducer(
@@ -48,8 +47,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Send AVRO data to Kafka topic.')
     parser.add_argument('--topic', type=str, required=True, help='Kafka topic to send data to')
     parser.add_argument('--input', type=str, required=True, help='Path to the input AVRO file')
+    parser.add_argument('--schema', type=str, required=True, help='Path to the AVRO schema file')
 
     args = parser.parse_args()
 
-    main(args.topic, args.input)
+    main(args.topic, args.input, args.schema)
 

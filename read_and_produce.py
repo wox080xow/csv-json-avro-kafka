@@ -4,6 +4,11 @@ from avro.datafile import DataFileReader
 from avro.io import DatumReader
 from confluent_kafka.avro import AvroProducer
 from confluent_kafka.avro import CachedSchemaRegistryClient
+import configparser
+
+# 讀取設定檔
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 def read_avro_data(path):
     with open(path, 'rb') as file:
@@ -14,8 +19,10 @@ def read_avro_data(path):
 
 def main(topic, avro_file_path, schema_file_path):
     # Kafka and Schema Registry configuration
-    KAFKA_BROKER = '172.31.15.9:9092,172.31.13.152:9092,172.31.1.59:9092'
-    SCHEMA_REGISTRY_URL = 'http://172.31.15.9:8081'
+    #KAFKA_BROKER = '172.31.15.9:9092,172.31.13.152:9092,172.31.1.59:9092'
+    KAFKA_BROKER = config['KAFKA']['KAFKA_BROKER']
+    #SCHEMA_REGISTRY_URL = 'http://172.31.15.9:8081'
+    SCHEMA_REGISTRY_URL = config['KAFKA']['SCHEMA_REGISTRY_URL']
     
     # 設置 Schema Registry 客戶端
     schema_registry_client = CachedSchemaRegistryClient(SCHEMA_REGISTRY_URL)
